@@ -22,5 +22,6 @@ app.get('/user/:id', Users.getUser);
 app.post('/categories', Categories.createCategorie);
 app.get('/categories', Categories.getAllCategories);
 app.post('/post', BlogPost.createPost);
+app.get('/post', BlogPost.getAllPost);
 
 app.listen(3000, () => console.log('  ouvindo porta 3000!'));
