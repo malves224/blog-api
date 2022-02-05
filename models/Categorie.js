@@ -1,10 +1,9 @@
-// models/User.js
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const Categorie = sequelize.define('Categorie', {
     name: DataTypes.STRING,
   }, {
     timestamps: false,
   });
 
-  return User;
+  return Categorie;
 };
