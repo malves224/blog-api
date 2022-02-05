@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const validateToekn = require('./auth/validateToken');
-const { Users, Categories } = require('./controllers');
+const { Users, Categories, BlogPost } = require('./controllers');
 
 const app = express();
 
@@ -21,5 +21,6 @@ app.get('/user', Users.getUsers);
 app.get('/user/:id', Users.getUser);
 app.post('/categories', Categories.createCategorie);
 app.get('/categories', Categories.getAllCategories);
+app.post('/post', BlogPost.createPost);
 
 app.listen(3000, () => console.log('  ouvindo porta 3000!'));
