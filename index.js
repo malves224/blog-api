@@ -14,4 +14,6 @@ app.get('/', (request, response) => {
 
 app.post('/user', Users.createUser);
 
+app.post('/login', Users.loginUser);
+
 app.listen(3000, () => console.log('  ouvindo porta 3000!'));
