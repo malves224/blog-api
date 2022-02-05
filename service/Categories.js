@@ -7,6 +7,15 @@ function validateDataName(name) {
   return {};
 }
 
+async function validExistCategorie(categoryId) {
+  const responseCategorie = await Categorie
+    .findOne({ where: { id: categoryId } });
+    if (!responseCategorie) {
+      return { code: 400, message: '"categoryIds" not found' };
+    }
+    return {};
+}
+
 async function create({ name }) {
   const nameIsValid = validateDataName(name);
   if (nameIsValid.message) {
@@ -32,4 +41,5 @@ async function getAll() {
 module.exports = {
   create,
   getAll,
+  validExistCategorie,
 };
