@@ -20,6 +20,16 @@ async function create({ name }) {
   }
 }
 
+async function getAll() {
+  try {
+    const responseCategories = await Categorie.findAll();
+    return responseCategories;
+  } catch (error) {
+    return { code: 500, message: error.message };
+  }
+}
+
 module.exports = {
   create,
+  getAll,
 };

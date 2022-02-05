@@ -20,5 +20,6 @@ app.use(validateToekn);
 app.get('/user', Users.getUsers);
 app.get('/user/:id', Users.getUser);
 app.post('/categories', Categories.createCategorie);
+app.get('/categories', Categories.getAllCategories);
 
 app.listen(3000, () => console.log('  ouvindo porta 3000!'));
