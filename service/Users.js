@@ -127,7 +127,17 @@ async function create(user) {
   };
 }
 
+async function getAllUsers() {
+  try {
+    const usersResponse = await User.findAll();
+    return usersResponse;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
    create,
    login,
+   getAllUsers,
 };
