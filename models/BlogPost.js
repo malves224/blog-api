@@ -4,7 +4,8 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     userId: DataTypes.INTEGER,
   }, {
-    timestamps: false,
+    createdAt: 'published',
+    updatedAt: 'updated',
   });
 
   BlogPost.associate = (models) => {
