@@ -44,7 +44,7 @@ function generateToken(data) {
   return token;
 }
 
-async function verifyIfExist(email) {
+async function verifyIfUserExist(email) {
   const responseUser = await User.findOne({ where: { email } });
     if (!responseUser) {
       return {};
@@ -114,7 +114,7 @@ async function create(user) {
     return { code: userIsValid.code, message: userIsValid.message };
   }
 
-  const userAlreadyExist = await verifyIfExist(user.email);
+  const userAlreadyExist = await verifyIfUserExist(user.email);
   if (userAlreadyExist.message) {
     return { code: userAlreadyExist.code, message: userAlreadyExist.message };
   }
@@ -136,8 +136,21 @@ async function getAllUsers() {
   }
 }
 
+async function getUserById(id) {
+  try {
+    const responseUser = await User.findOne({ where: { id } });
+    if (!responseUser) {
+      return { code: 404, message: 'User does not exist' };
+    } 
+    return responseUser;
+    } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
    create,
    login,
    getAllUsers,
+   getUserById,
 };
