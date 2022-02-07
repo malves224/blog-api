@@ -22,6 +22,7 @@ app.get('/user/:id', Users.getUser);
 app.delete('/user/me', Users.deleteUser);
 app.post('/categories', Categories.createCategorie);
 app.get('/categories', Categories.getAllCategories);
+app.get('/post/search', BlogPost.searchPost);
 app.post('/post', BlogPost.createPost);
 app.get('/post', BlogPost.getAllPost);
 app.get('/post/:id', BlogPost.getPostById);

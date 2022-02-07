@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { BlogPost, User, Categorie } = require('../models');
 const { validExistCategorie } = require('./Categories');
 const { createPostCategorie } = require('./PostCategorie');
@@ -123,6 +124,23 @@ async function deletePost(idPost, idUser) {
     console.log(error.message);
   }
 }
+async function searchPost(searchTerm = '') {
+  if (!searchTerm) {
+    const allPost = await getAll();
+    return allPost;
+  }
+  const responseSearch = await BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `${searchTerm}%` } },
+        { content: { [Op.like]: `${searchTerm}%` } },
+      ],
+    },
+    include: [{ model: User, as: 'user', attributes: { exclude: ['password'] } }, 
+    { model: Categorie, as: 'categories', through: { attributes: [] } }],
+  });
+  return responseSearch;
+}
 
 module.exports = {
   create,
@@ -130,4 +148,5 @@ module.exports = {
   getById,
   update,
   deletePost,
+  searchPost,
 };
