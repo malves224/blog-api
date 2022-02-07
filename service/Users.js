@@ -147,10 +147,21 @@ async function getUserById(id) {
     console.log(error.message);
   }
 }
+async function deleteUserAuthenticated(idUser) {
+  try {
+     await User.destroy({
+      where: { id: idUser },
+    });
+    return {};
+  } catch (error) {
+    return { code: 500, message: error.message };
+  }
+}
 
 module.exports = {
    create,
    login,
    getAllUsers,
    getUserById,
+   deleteUserAuthenticated,
 };

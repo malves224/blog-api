@@ -19,6 +19,7 @@ app.use(validateToekn);
 
 app.get('/user', Users.getUsers);
 app.get('/user/:id', Users.getUser);
+app.delete('/user/me', Users.deleteUser);
 app.post('/categories', Categories.createCategorie);
 app.get('/categories', Categories.getAllCategories);
 app.post('/post', BlogPost.createPost);

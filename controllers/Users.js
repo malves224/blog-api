@@ -1,4 +1,5 @@
-const { create, login, getAllUsers, getUserById } = require('../service/Users');
+const { create, login, getAllUsers, 
+  getUserById, deleteUserAuthenticated } = require('../service/Users');
 
 const createUser = async (req, res) => {
   const response = await create(req.body);
@@ -30,9 +31,23 @@ const getUser = async (req, res) => {
   return res.status(200).json(userResponse);
 };
 
+const deleteUser = async (req, res) => {
+  const { id: idUser } = req.userAuthenticated;
+
+  const responseDeleteUser = await deleteUserAuthenticated(idUser);
+
+  if (responseDeleteUser.message) {
+    return res.status(responseDeleteUser.code)
+      .json({ message: responseDeleteUser.message });
+  }
+
+  return res.status(204).end();
+};
+
 module.exports = {
   createUser,
   loginUser,
   getUsers,
   getUser,
+  deleteUser,
 };
