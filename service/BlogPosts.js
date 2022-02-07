@@ -63,8 +63,53 @@ async function getById(id) {
   return responsePost;
 }
 
+async function validateDataPostUpdate({ title, content, categoryIds }) {
+  if (!title) {
+    return { message: '"title" is required' };
+  }
+  if (!content) {
+    return { message: '"content" is required' };
+  }
+  if (categoryIds) {
+    return { message: 'Categories cannot be edited' };
+  }
+  return {};
+}
+
+async function checkAuthorPost(idPost, idUser) {
+  const responsePost = await BlogPost.findOne({ where: { id: idPost } });
+  if (idUser !== responsePost.userId) {
+    return { message: 'Unauthorized user' };
+  }
+  return {};
+}
+
+async function update(dataBody, idPost, idUser) {
+  const dataBodyIsValid = await validateDataPostUpdate(dataBody);
+  if (dataBodyIsValid.message) {
+    return { code: 400, message: dataBodyIsValid.message };
+  }
+
+  const postBelongsToUser = await checkAuthorPost(idPost, idUser);
+  if (postBelongsToUser.message) {
+    return { code: 401, message: postBelongsToUser.message };
+  }
+
+  const { title, content } = dataBody;
+  await BlogPost.update({ title, content }, { where: { id: idPost } });
+  const postUpdated = await BlogPost.findOne(
+    {
+    where: { id: idPost },
+    include: [{ model: Categorie, as: 'categories', through: { attributes: [] } }],
+    attributes: { exclude: ['id', 'updated', 'published'] },
+    },
+  );
+  return postUpdated;
+}
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };
