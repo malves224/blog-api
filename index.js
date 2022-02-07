@@ -25,5 +25,6 @@ app.post('/post', BlogPost.createPost);
 app.get('/post', BlogPost.getAllPost);
 app.get('/post/:id', BlogPost.getPostById);
 app.put('/post/:id', BlogPost.updatePost);
+app.delete('/post/:id', BlogPost.deletePost);
 
 app.listen(3000, () => console.log('  ouvindo porta 3000!'));

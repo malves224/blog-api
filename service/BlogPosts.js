@@ -24,6 +24,30 @@ async function verifyIfAllCategoriesExist(categoriesIds) {
   return !allResponseList.some((response) => response.message); // se tem message, é pq alguma categoria nao existe
 }
 
+async function validateDataPostUpdate({ title, content, categoryIds }) {
+  if (!title) {
+    return { message: '"title" is required' };
+  }
+  if (!content) {
+    return { message: '"content" is required' };
+  }
+  if (categoryIds) {
+    return { message: 'Categories cannot be edited' };
+  }
+  return {};
+}
+
+async function checkAuthorPost(idPost, idUser) {
+  const responsePost = await BlogPost.findOne({ where: { id: idPost } });
+  if (!responsePost) {
+    return { code: 404, message: 'Post does not exist' };
+  }
+  if (idUser !== responsePost.userId) {
+    return { code: 401, message: 'Unauthorized user' };
+  }
+  return {};
+}
+
 async function create(post, userId) {
   const dataPostIsValid = validDataPost(post);
   if (dataPostIsValid.message) {
@@ -63,27 +87,6 @@ async function getById(id) {
   return responsePost;
 }
 
-async function validateDataPostUpdate({ title, content, categoryIds }) {
-  if (!title) {
-    return { message: '"title" is required' };
-  }
-  if (!content) {
-    return { message: '"content" is required' };
-  }
-  if (categoryIds) {
-    return { message: 'Categories cannot be edited' };
-  }
-  return {};
-}
-
-async function checkAuthorPost(idPost, idUser) {
-  const responsePost = await BlogPost.findOne({ where: { id: idPost } });
-  if (idUser !== responsePost.userId) {
-    return { message: 'Unauthorized user' };
-  }
-  return {};
-}
-
 async function update(dataBody, idPost, idUser) {
   const dataBodyIsValid = await validateDataPostUpdate(dataBody);
   if (dataBodyIsValid.message) {
@@ -107,9 +110,24 @@ async function update(dataBody, idPost, idUser) {
   return postUpdated;
 }
 
+async function deletePost(idPost, idUser) {
+  const userIsOwnerPost = await checkAuthorPost(idPost, idUser);
+  if (userIsOwnerPost.message) {
+    return { code: userIsOwnerPost.code, message: userIsOwnerPost.message };
+  }
+
+  try {
+    await BlogPost.destroy({ where: { id: idPost } });
+    return {};
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 module.exports = {
   create,
   getAll,
   getById,
   update,
+  deletePost,
 };
